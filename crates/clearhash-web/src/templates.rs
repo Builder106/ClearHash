@@ -634,7 +634,7 @@ fn layout(title: &str, body: Markup) -> Markup {
                         }
                         nav {
                             a href="/inspect" { "inspect" }
-                            a href="https://github.com/Builder106/ClearHash" { "source ↗" }
+                            a href="https://github.com/Builder106/clear-hash" { "source ↗" }
                         }
                     }
                 }
@@ -648,7 +648,7 @@ fn layout(title: &str, body: Markup) -> Markup {
                         }
                         span.dim {
                             "CLH-26 · "
-                            a href="https://github.com/Builder106/ClearHash" { "github.com/Builder106/ClearHash" }
+                            a href="https://github.com/Builder106/clear-hash" { "github.com/Builder106/clear-hash" }
                         }
                     }
                 }
@@ -714,7 +714,7 @@ pub async fn landing() -> Markup {
                     }
                     div.cta {
                         a.btn href="/inspect" { "[ inspect a package → ]" }
-                        a.btn.dim href="https://github.com/Builder106/ClearHash" { "[ source on github ↗ ]" }
+                        a.btn.dim href="https://github.com/Builder106/clear-hash" { "[ source on github ↗ ]" }
                     }
                 }
 
@@ -824,7 +824,7 @@ pub async fn landing() -> Markup {
                         }
                     }
                     pre.log style="padding-left:2.2em;" {
-        "  " (PreEscaped("<span class=\"dim\">$</span> <span class=\"bold\">git</span> clone https://github.com/Builder106/ClearHash.git\n"))
+        "  " (PreEscaped("<span class=\"dim\">$</span> <span class=\"bold\">git</span> clone https://github.com/Builder106/clear-hash.git\n"))
         "  " (PreEscaped("<span class=\"dim\">$</span> <span class=\"bold\">cd</span> ClearHash\n"))
         "  " (PreEscaped("<span class=\"dim\">$</span> <span class=\"bold\">cargo</span> install --path crates/clearhash-cli\n\n"))
         "  " (PreEscaped("<span class=\"dim\">$</span> <span class=\"bold\">clearhash</span> verify <span class=\"link\">npm:sigstore@2.3.1</span>"))

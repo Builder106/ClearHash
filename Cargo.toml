@@ -41,7 +41,7 @@ version = "0.1.0"
 edition = "2021"
 rust-version = "1.88"
 license = "MIT"
-repository = "https://github.com/Builder106/ClearHash"
+repository = "https://github.com/Builder106/clear-hash"
 authors = ["Yinka Vaughan"]
 
 [workspace.dependencies]

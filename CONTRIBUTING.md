@@ -5,7 +5,7 @@ Thanks for your interest. This is a young project — patch reviews are quick.
 ## Dev setup
 
 ```bash
-git clone https://github.com/Builder106/ClearHash.git
+git clone https://github.com/Builder106/clear-hash.git
 cd ClearHash
 cargo build --workspace
 cargo test --workspace

@@ -150,7 +150,7 @@ Or paste a package into the form at [`/inspect`](https://clear-hash.vercel.app/i
 Requires Rust 1.88+ and a running Docker daemon (Docker Desktop or OrbStack on macOS).
 
 ```bash
-git clone https://github.com/Builder106/ClearHash.git
+git clone https://github.com/Builder106/clear-hash.git
 cd ClearHash
 cargo install --path crates/clearhash-cli
 clearhash --version
