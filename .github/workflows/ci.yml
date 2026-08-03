@@ -14,6 +14,17 @@ env:
   RUSTFLAGS: "-D warnings"
 
 jobs:
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITLEAKS_NOTIFY_USER_LIST: ""
+
   fmt:
     name: Format
     runs-on: ubuntu-24.04
@@ -48,6 +59,9 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --workspace
       - run: cargo test --workspace
+
+      - name: Rust dependency audit
+        run: cargo install cargo-audit --locked && cargo audit
 
   # Docker-gated integration test: only runs on push to main (where ubuntu has docker daemon).
   integration:
