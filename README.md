@@ -196,10 +196,10 @@ clearhash verify --simulate-tamper=content-swap npm:sigstore@2.3.1
 ## Ecosystem support
 
 | Ecosystem | Status | Attestation source | Rebuild image |
-|---|---|---|---|
-| **npm**   | ✅ end-to-end | `registry.npmjs.org/-/npm/v1/attestations/...` | `node:20.11.1-bookworm-slim` |
-| **PyPI**  | 🚧 adapter scaffold | PEP 740 `/integrity/.../provenance` | `python:3.12.2-slim-bookworm` |
-| **Cargo** | 🚧 adapter scaffold | _none — `--allow-unattested` required_ | `rust:1.78-slim-bookworm` |
+| --- | --- | --- | --- |
+| **npm** | ✅ end-to-end | `registry.npmjs.org/-/npm/v1/attestations/...` | `node:20.11.1-bookworm-slim` |
+| **PyPI** | 🚧 adapter scaffold | PEP 740 `/integrity/.../provenance` | `python:3.12.2-slim-bookworm` |
+| **Cargo** | 🚧 adapter scaffold | *none — `--allow-unattested` required* | `rust:1.78-slim-bookworm` |
 
 The npm path is end-to-end working today. PyPI and Cargo land their full rebuild flows
 behind the same `EcosystemAdapter` trait — no engine changes needed.
