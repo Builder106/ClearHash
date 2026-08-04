@@ -9,7 +9,7 @@ git clone https://github.com/Builder106/clear-hash.git
 cd ClearHash
 cargo build --workspace
 cargo test --workspace
-```
+```text
 
 You'll need:
 
@@ -21,7 +21,7 @@ You'll need:
 
 ```bash
 cargo run --bin clearhash -- verify npm:sigstore@2.3.1
-```
+```text
 
 The first run pulls `node:20.11.1-bookworm-slim` (~150 MB) and clones the sigstore-js
 repo. Subsequent runs are cached.
@@ -42,7 +42,7 @@ repo. Subsequent runs are cached.
 cargo test --workspace                          # unit + integration
 cargo clippy --workspace --all-targets -- -D warnings
 cargo fmt --check
-```
+```text
 
 Integration tests that hit Docker are gated on a reachable daemon and skip otherwise.
 
@@ -50,9 +50,9 @@ Integration tests that hit Docker are gated on a reachable daemon and skip other
 
 One line, present-tense, no Claude/AI co-author trailers. Reference an issue if applicable.
 
-```
+```text
 fix(sandbox): handle monorepo subdirs in npm rebuild script
-```
+```text
 
 ## PR process
 

@@ -31,7 +31,7 @@ the tarball is what the source code would produce*.
 
 ClearHash actually does the rebuild and the comparison.
 
-```
+```text
 $ clearhash verify npm:sigstore@2.3.1
 [1/5] Fetching sigstore from npm
       sha256: 1b5041a35f86125db7f872742502470753fd2e1109521b7dbff8a61d229a03c2
@@ -43,14 +43,14 @@ $ clearhash verify npm:sigstore@2.3.1
 [5/5] Comparing file trees
 
 ✓ MATCH npm:sigstore@2.3.1 tree-hash ec714016d7e4ce742f9aa23b6f16f19cb967bf82b78c343297013dcc268b107e
-```
+```text
 
 A tampered artifact gets a different ending. To see what ClearHash actually catches, run
 the verify with `--simulate-tamper`, which deliberately modifies the registry-extracted
 tree before comparison (the underlying tarball from npm is clean — the simulation is
 clearly announced):
 
-```
+```text
 $ clearhash verify --simulate-tamper npm:sigstore@2.3.1
 ⚠ TAMPER SIMULATION · The registry-extracted tree will be modified before comparison (All mode).
                       The MISMATCH below is real but the registry tarball is clean.
@@ -69,7 +69,7 @@ $ clearhash verify --simulate-tamper npm:sigstore@2.3.1
     ContentDiffers  { path: "dist/index.js" }
     ModeDiffers     { path: "dist/index.js" }
     OnlyInRebuild   { path: "README.md" }
-```
+```text
 
 The four tamper modes (`injected-payload`, `content-swap`, `mode-flip`, `deletion`, or
 `all`) each surface a different diff category. Useful for demos, screenshots, and writing
@@ -121,7 +121,7 @@ sequenceDiagram
     else hashes differ
         CLI-->>User: ✗ MISMATCH + per-file diff (exit 1)
     end
-```
+```text
 
 The comparison model is **file-tree content hash**, not byte-identical tarball SHA-256.
 Strict byte equality isn't achievable today even with `SOURCE_DATE_EPOCH` — npm tarball
@@ -141,7 +141,7 @@ because it needs a Docker daemon.
 
 ```bash
 curl 'https://clear-hash.vercel.app/api/inspect?package=npm:sigstore@2.3.1'
-```
+```text
 
 Or paste a package into the form at [`/inspect`](https://clear-hash.vercel.app/inspect).
 
@@ -154,7 +154,7 @@ git clone https://github.com/Builder106/clear-hash.git
 cd ClearHash
 cargo install --path crates/clearhash-cli
 clearhash --version
-```
+```text
 
 ---
 
@@ -180,26 +180,26 @@ clearhash verify npm:foo@1.0.0 --keep-workdir
 # (Output is clearly marked as a simulation; the npm tarball is clean.)
 clearhash verify --simulate-tamper npm:sigstore@2.3.1
 clearhash verify --simulate-tamper=content-swap npm:sigstore@2.3.1
-```
+```text
 
 ### Exit codes
 
-| Code | Meaning |
-|------|---------|
-| 0    | Tree-hash match. Safe to install. |
+| Code | Meaning                                                       |
+| ---- | ------------------------------------------------------------- |
+| 0    | Tree-hash match. Safe to install.                             |
 | 1    | Tree-hash mismatch *or* attestation signature invalid. Block. |
 | 2    | No SLSA attestation, and `--allow-unattested` was not passed. |
-| 3    | Infrastructure failure (no docker, no network, etc.). |
+| 3    | Infrastructure failure (no docker, no network, etc.).         |
 
 ---
 
 ## Ecosystem support
 
-| Ecosystem | Status | Attestation source | Rebuild image |
-| --- | --- | --- | --- |
-| **npm** | ✅ end-to-end | `registry.npmjs.org/-/npm/v1/attestations/...` | `node:20.11.1-bookworm-slim` |
-| **PyPI** | 🚧 adapter scaffold | PEP 740 `/integrity/.../provenance` | `python:3.12.2-slim-bookworm` |
-| **Cargo** | 🚧 adapter scaffold | *none — `--allow-unattested` required* | `rust:1.78-slim-bookworm` |
+| Ecosystem | Status              | Attestation source                             | Rebuild image                 |
+| --------- | ------------------- | ---------------------------------------------- | ----------------------------- |
+| **npm**   | ✅ end-to-end       | `registry.npmjs.org/-/npm/v1/attestations/...` | `node:20.11.1-bookworm-slim`  |
+| **PyPI**  | 🚧 adapter scaffold | PEP 740 `/integrity/.../provenance`            | `python:3.12.2-slim-bookworm` |
+| **Cargo** | 🚧 adapter scaffold | *none — `--allow-unattested` required*         | `rust:1.78-slim-bookworm`     |
 
 The npm path is end-to-end working today. PyPI and Cargo land their full rebuild flows
 behind the same `EcosystemAdapter` trait — no engine changes needed.
@@ -231,7 +231,7 @@ behind the same `EcosystemAdapter` trait — no engine changes needed.
 
 ## Architecture
 
-```
+```text
 ClearHash/
 ├── crates/
 │   ├── clearhash-cli/             # CLI binary; clap, console, tokio
@@ -247,7 +247,7 @@ ClearHash/
 ├── vercel.json                    # Vercel rewrites + runtime config
 ├── Dockerfile                     # alternative: multi-stage build of clearhash-web binary
 └── fly.toml                       # Fly.io deployment config (Docker-based)
-```
+```text
 
 Every ecosystem-specific quirk lives behind `EcosystemAdapter`. Engine crates depend only
 on the trait — adding a new ecosystem is one new file under `clearhash-ecosystems/src/`.
@@ -266,7 +266,7 @@ secondary target is any Dockerfile-friendly host (Fly.io, Render, Railway, plain
 vercel link
 # Deploy
 vercel deploy --prod
-```
+```text
 
 Vercel auto-detects [vercel.json](vercel.json) and the root `[package]` + `[[bin]]` entries
 in [Cargo.toml](Cargo.toml). The function binary is built from [api/clearhash.rs](api/clearhash.rs),
@@ -284,7 +284,7 @@ flyctl deploy
 docker build -t clearhash-web .
 docker run --rm -p 8080:8080 clearhash-web
 open http://localhost:8080
-```
+```text
 
 The deployed Docker image is ~158 MB (debian:bookworm-slim + the ~5 MB Rust binary + assets).
 No registry credentials, no DB, no secrets — it just proxies the live npm/PyPI APIs.
