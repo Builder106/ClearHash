@@ -4,6 +4,10 @@
 > things happen — retrospectives need this raw material to land.
 > Reverse-chronological; one paragraph max per entry.
 
+## 2026-08-07 — Verification architecture specification and workspace audit #milestone
+
+Completed a comprehensive workspace feature audit across all seven crates. Created `docs/VERIFICATION_SPECIFICATION.md` to document the five-stage attestation pipeline, SLSA/Rekor verification flows, isolated container sandbox bounds, and differential tree matching taxonomy (`OnlyInRegistry`, `ContentDiffers`, `ModeDiffers`, `OnlyInRebuild`). Placed roadmap items for v1.1 DSSE signature checks, PyPI end-to-end rebuilds, and pre-fetched offline dependency caching into active planning.
+
 ## 2026-06-13 — Closed the CLI + registry test gaps #milestone
 
 A test audit flagged two zero-coverage hotspots. Added 10 unit tests to `clearhash-cli` covering the clap surface — `verify`/`inspect` parsing, the fiddly `--simulate-tamper` flag (`default_missing_value="all"` on the bare flag, `require_equals`, kebab values, unknown-value rejection), the `TamperModeArg → TamperMode` mapping, and a `Cli::command().debug_assert()` config check. Added 8 to `clearhash-registry` using `wiremock` (new dev-dep) to exercise the network-bound `fetch()`/`resolve_latest_version()` against a local mock server: success path writes the archive + computes the right sha256, attestation 404 → `None`, adapter-without-attestation skips the request, artifact/attestation non-2xx → `BadStatus`, version parse, and `UnsupportedResolution` when the adapter has no latest-version URL. Pattern worth reusing: a tiny `FakeAdapter` implementing `EcosystemAdapter` with URLs pointed at the mock server, stubbing the rebuild/normalize methods the fetch path never touches. All 18 green.
