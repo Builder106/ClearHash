@@ -1,0 +1,22 @@
+--- src/lib.rs.orig	2026-08-13 21:15:00
++++ src/lib.rs	2026-08-13 21:15:00
+@@ -37,6 +37,10 @@
+     static ref AWAITER: Awaiter = Awaiter::new();
+ }
+
++// env is used in the run() function for VERCEL_IPC_PATH and VERCEL_DEV_PORT
++// Must be imported unconditionally since run() is not cfg(unix)
++use std::env;
++
+ use crate::types::IntoFunctionResponse;
+
+ #[cfg(unix)]
+@@ -45,10 +49,6 @@
+     crate::ipc_utils::{IPC_READY, enqueue_or_send_message, flush_init_log_buffer, send_message},
+     std::env,
+     std::os::unix::net::UnixStream,
+-    std::sync::atomic::Ordering,
+-    std::sync::{Arc, Mutex},
+ };
+
+ #[cfg(unix)]

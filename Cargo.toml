@@ -71,6 +71,9 @@ flate2 = "1"
 tar = "0.4"
 walkdir = "2"
 
+[patch.crates-io]
+vercel_runtime = { path = "patches/vercel_runtime-2.4.0" }
+
 [profile.release]
 lto = "thin"
 codegen-units = 1
