@@ -29,11 +29,16 @@ repo. Subsequent runs are cached.
 ## Project-specific guardrails
 
 - **No skipping `--ignore-scripts`.** The npm rebuild script always passes
+
   `--ignore-scripts`. If your change needs lifecycle hooks, you've found a real determinism
   problem — fix it upstream, don't broaden the threat model.
+
 - **Pin every Docker image to an exact patch version.** No `node:20`, no `node:latest`.
+
   CI updates pins via Renovate.
+
 - **Adapter additions go in `clearhash-ecosystems/src/<name>.rs`.** Engine crates
+
   (`registry`, `provenance`, `sandbox`) should never grow ecosystem-specific branches.
 
 ## Tests
@@ -66,10 +71,15 @@ fix(sandbox): handle monorepo subdirs in npm rebuild script
 To keep the surface honest, ClearHash explicitly *does not* try to:
 
 - Detect *malicious source code*. ClearHash verifies that the binary matches the source.
+
   It does not judge whether the source is benign. Pair it with static analysis.
-- Replace `npm audit` / `pip-audit` / `cargo audit`. Those check known CVEs in your
+
+- Replace `npm audit`/`pip-audit`/`cargo audit`. Those check known CVEs in your
+
   dependency tree. ClearHash checks artifact provenance.
+
 - Wrap `npm install` itself. v1 is a verifier you run before/in-CI alongside install.
+
   PATH-shim integration is on the v1.2 roadmap.
 
 If a PR's purpose is one of the above, please open an issue first to discuss.

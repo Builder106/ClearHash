@@ -26,7 +26,7 @@ ClearHash answers a question almost nothing in the existing supply chain answers
 The supply-chain attacks of the last five years (event-stream, ua-parser-js, the
 post-install crypto-wallet stealers, xz-utils) all share one shape: the registry tarball
 diverges from the source repo. Existing tools verify *who* signed the tarball (Cosign), or
-*that the tarball matches itself across mirrors* (Sigstore transparency), but not *whether
+*that the tarball matches itself across mirrors*(Sigstore transparency), but not*whether
 the tarball is what the source code would produce*.
 
 ClearHash actually does the rebuild and the comparison.
@@ -161,28 +161,36 @@ clearhash --version
 ## Use
 
 ```bash
+
 # Full pipeline: fetch + attest + rebuild + compare
+
 clearhash verify npm:sigstore@2.3.1
 
 # Just fetch + parse the attestation envelope (no docker required)
+
 clearhash inspect npm:sigstore@2.3.1
 
 # JSON output for CI
+
 clearhash verify npm:sigstore@2.3.1 --json
 
 # Cargo has no SLSA attestation in the wild yet — opt in explicitly
+
 clearhash verify --allow-unattested cargo:serde@1.0.197
 
 # Keep the workdir to inspect a mismatch
+
 clearhash verify npm:foo@1.0.0 --keep-workdir
 
-# Demo: deliberately tamper with the extracted registry tree so the diff is non-empty.
+# Demo: deliberately tamper with the extracted registry tree so the diff is non-empty
+
 # (Output is clearly marked as a simulation; the npm tarball is clean.)
+
 clearhash verify --simulate-tamper npm:sigstore@2.3.1
 clearhash verify --simulate-tamper=content-swap npm:sigstore@2.3.1
 ```text
 
-### Exit codes
+## Exit codes
 
 | Code | Meaning                                                       |
 | ---- | ------------------------------------------------------------- |
@@ -197,9 +205,9 @@ clearhash verify --simulate-tamper=content-swap npm:sigstore@2.3.1
 
 | Ecosystem | Status              | Attestation source                             | Rebuild image                 |
 | --------- | ------------------- | ---------------------------------------------- | ----------------------------- |
-| **npm**   | ✅ end-to-end       | `registry.npmjs.org/-/npm/v1/attestations/...` | `node:20.11.1-bookworm-slim`  |
-| **PyPI**  | 🚧 adapter scaffold | PEP 740 `/integrity/.../provenance`            | `python:3.12.2-slim-bookworm` |
-| **Cargo** | 🚧 adapter scaffold | *none — `--allow-unattested` required*         | `rust:1.78-slim-bookworm`     |
+| **npm**   | ✅ end-to-end       | `registry.npmjs.org/-/npm/v1/attestations/...`|`node:20.11.1-bookworm-slim`  |
+| **PyPI**  | 🚧 adapter scaffold | PEP 740 `/integrity/.../provenance`|`python:3.12.2-slim-bookworm` |
+| **Cargo** | 🚧 adapter scaffold | *none — `--allow-unattested`required*         |`rust:1.78-slim-bookworm`     |
 
 The npm path is end-to-end working today. PyPI and Cargo land their full rebuild flows
 behind the same `EcosystemAdapter` trait — no engine changes needed.
@@ -216,7 +224,7 @@ behind the same `EcosystemAdapter` trait — no engine changes needed.
 - Subject Alternative Name → GitHub Actions workflow URI
 - **Cross-check**: workflow URI's `owner/repo` segment matches the attested source repo
 - Rekor transparency-log entry presence
-- Source repo `git clone` + commit pinning with `HEAD == attested-commit` verification
+- Source repo `git clone`+ commit pinning with`HEAD == attested-commit` verification
 - Network-isolated rebuild container (default bridge; build needs network for `npm ci`)
 - File-tree Merkle compare with per-file diff output
 
@@ -262,25 +270,32 @@ secondary target is any Dockerfile-friendly host (Fly.io, Render, Railway, plain
 ### Vercel (recommended)
 
 ```bash
+
 # One-time: link this repo to a new Vercel project
+
 vercel link
+
 # Deploy
+
 vercel deploy --prod
 ```text
 
-Vercel auto-detects [vercel.json](vercel.json) and the root `[package]` + `[[bin]]` entries
+Vercel auto-detects [vercel.json](vercel.json) and the root `[package]`+`[[bin]]` entries
 in [Cargo.toml](Cargo.toml). The function binary is built from [api/clearhash.rs](api/clearhash.rs),
-which wraps the shared `clearhash_web::app` router with `vercel_runtime::axum::VercelLayer`
+which wraps the shared `clearhash_web::app`router with`vercel_runtime::axum::VercelLayer`
 so every route runs through the same handler that powers the local server.
 
-### Docker (Fly.io / Render / Railway)
+## Docker (Fly.io / Render / Railway)
 
 ```bash
+
 # Fly.io (one-time)
+
 flyctl launch --copy-config --no-deploy
 flyctl deploy
 
 # Or build + run locally
+
 docker build -t clearhash-web .
 docker run --rm -p 8080:8080 clearhash-web
 open http://localhost:8080
@@ -298,16 +313,23 @@ ClearHash narrows the attack surface from "the registry served you whatever it w
 the workflow that signed the attestation." Caveats:
 
 1. **The lockfile is part of the trust root.** If `package-lock.json` itself has been
+
    tampered with at HEAD of the attested commit, the rebuild will faithfully reproduce
    the tampered tree. This is correct: the attestation says "this is what the source
    produces" — the rebuild verifies that claim, not "the source is benign."
+
 2. **The rebuild container has network access** for dependency installs (`npm ci`,
+
    `pip install`, `cargo download`). `--ignore-scripts` blocks the highest-impact
    exfiltration path (lifecycle hooks). Fully air-gapped builds are v1.1.
+
 3. **Determinism failures look identical to tampering.** If `npm pack` is genuinely
+
    non-deterministic for a given package (e.g. embeds a hostname), ClearHash flags it
    as a mismatch. The `--keep-workdir` flag is for triaging these cases.
+
 4. **Docker is required.** No daemon, no verification. macOS users: Docker Desktop or
+
    OrbStack.
 
 ---
