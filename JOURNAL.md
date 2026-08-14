@@ -4,6 +4,10 @@
 > things happen — retrospectives need this raw material to land.
 > Reverse-chronological; one paragraph max per entry.
 
+## 2026-08-14: Accessible plain-English documentation update #decision
+
+Updated the README introduction and tagline to frame software supply chain security around a food safety-seal metaphor. Clarified the core value proposition of byte-for-byte binary verification for non-specialist readers without compromising the deep-dive SLSA/Rekor engineering specifications.
+
 ## 2026-08-07 — Verification architecture specification and workspace audit #milestone
 
 Completed a comprehensive workspace feature audit across all seven crates. Created `docs/VERIFICATION_SPECIFICATION.md` to document the five-stage attestation pipeline, SLSA/Rekor verification flows, isolated container sandbox bounds, and differential tree matching taxonomy (`OnlyInRegistry`, `ContentDiffers`, `ModeDiffers`, `OnlyInRebuild`). Placed roadmap items for v1.1 DSSE signature checks, PyPI end-to-end rebuilds, and pre-fetched offline dependency caching into active planning.

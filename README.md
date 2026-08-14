@@ -1,23 +1,26 @@
 <picture>
   <source media="(prefers-color-scheme: dark)"  srcset="assets/banner-dark.png">
   <source media="(prefers-color-scheme: light)" srcset="assets/banner-light.png">
-  <img alt="ClearHash — rebuild every package, compare every byte, block every tamper" src="assets/banner-dark.png">
+  <img alt="ClearHash: A digital tamper-proof seal for software" src="assets/banner-dark.png">
 </picture>
 
 [![CI](https://img.shields.io/badge/CI-passing-success.svg)](.github/workflows/ci.yml)
 [![Rust](https://img.shields.io/badge/rust-1.88%2B-orange.svg)](https://www.rust-lang.org/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)]
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](#license)
 [![Ecosystems](https://img.shields.io/badge/ecosystems-npm%20%7C%20PyPI%20%7C%20Cargo-7c3aed.svg)]
 [![Sigstore](https://img.shields.io/badge/SLSA-Sigstore%20%2B%20Rekor-22c55e.svg)](https://www.sigstore.dev/)
 [![Demo](https://img.shields.io/badge/demo-clear-hash.vercel.app-success.svg)](https://clear-hash.vercel.app/)
 
-> A pre-install gatekeeper that fetches a package, verifies its SLSA attestation through
-> Sigstore + Rekor, rebuilds it from the attested source commit in an isolated Docker
-> container, and compares the rebuilt file tree against the registry artifact. If anything
-> differs, the install is blocked.
+> **A digital tamper-proof seal for software.** ClearHash verifies that downloaded packages match their exact original source code byte-for-byte.
+
+## 💡 What is ClearHash?
+
+Think of ClearHash like a verified safety seal on food packaging. When developers publish software, bad actors can secretly alter the final download. ClearHash independently rebuilds the software from scratch and checks every byte to prove nobody modified the program between the original source code and your computer.
+
+ClearHash acts as a pre-install gatekeeper. It fetches a package, verifies its SLSA attestation through Sigstore and Rekor, rebuilds it from the attested source commit in an isolated Docker container, and compares the rebuilt file tree against the registry artifact. If anything differs, the install is blocked.
 
 ClearHash answers a question almost nothing in the existing supply chain answers:
-**"is the binary I'm about to install actually a build of the source code it claims to be?"**
+**"Is the binary I am about to install actually a build of the source code it claims to be?"**
 
 ---
 
