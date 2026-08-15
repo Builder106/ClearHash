@@ -47,6 +47,19 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo clippy --workspace --all-targets -- -D warnings
 
+  security:
+    name: Security & License audit (cargo-deny & cargo-audit)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check
+          arguments: --all-features
+      - uses: rustsec/audit-check@v2.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
   test:
     name: Test (${{ matrix.os }})
     strategy:
@@ -60,9 +73,6 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --workspace
       - run: cargo test --workspace
-
-      - name: Rust dependency audit
-        run: cargo install cargo-audit --locked && cargo audit
 
   # Docker-gated integration test: only runs on push to main (where ubuntu has docker daemon).
   integration:
