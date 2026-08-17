@@ -6,7 +6,7 @@
 
 [![CI](https://img.shields.io/badge/CI-passing-success.svg)](.github/workflows/ci.yml)
 [![Rust](https://img.shields.io/badge/rust-1.88%2B-orange.svg)](https://www.rust-lang.org/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](#license)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Ecosystems](https://img.shields.io/badge/ecosystems-npm%20%7C%20PyPI%20%7C%20Cargo-7c3aed.svg)]
 [![Sigstore](https://img.shields.io/badge/SLSA-Sigstore%20%2B%20Rekor-22c55e.svg)](https://www.sigstore.dev/)
 [![Demo](https://img.shields.io/badge/demo-clear-hash.vercel.app-success.svg)](https://clear-hash.vercel.app/)
