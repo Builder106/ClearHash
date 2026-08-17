@@ -1,0 +1,7 @@
+# clear-hash Rust formatting configuration
+# Run with: cargo fmt --all --check
+
+edition = "2021"
+max_width = 100
+newline_style = "Unix"
+use_small_heuristics = "Default"
