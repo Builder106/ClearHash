@@ -2,7 +2,7 @@
 //!
 //! A `FileTreeHash` is the SHA-256 of a canonical, mode-normalized, mtime-stripped, path-sorted
 //! description of a directory tree. Two trees produce the same `FileTreeHash` iff every file path
-//! has the same content and the same normalized mode — independent of timestamps, archive format,
+//! has the same content and the same normalized mode, independent of timestamps, archive format,
 //! or compression level.
 
 use serde::{Deserialize, Serialize};

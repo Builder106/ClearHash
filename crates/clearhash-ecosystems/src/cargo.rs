@@ -1,4 +1,4 @@
-//! Cargo adapter — skeleton. Filled in at Step 7 of the implementation plan.
+//! Cargo ecosystem adapter.
 //!
 //! Cargo has no widespread SLSA attestation as of 2026. `attestation_url` returns `None`;
 //! every cargo verify requires `--allow-unattested` at the CLI layer.

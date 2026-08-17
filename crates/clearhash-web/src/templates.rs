@@ -84,7 +84,7 @@ body {
     text-shadow: 0 0 6px rgba(94, 255, 139, 0.55), 0 0 14px rgba(94, 255, 139, 0.25);
 }
 
-/* ============== TYPOGRAPHIC TOKENS ============== */
+/* Typographic Tokens */
 
 .prompt { color: var(--prompt); }
 .bold { color: var(--bold); font-weight: 700; }
@@ -116,7 +116,7 @@ a:hover {
     padding: 0 1.5rem;
 }
 
-/* ============== HEADER (tmux-style status bar) ============== */
+/* Header (tmux-style status bar) */
 
 header.bar {
     border-bottom: 1px solid var(--rule);
@@ -157,7 +157,7 @@ header.bar nav { display: flex; gap: 1.25rem; }
 header.bar nav a { color: var(--fg-dim); text-decoration: none; }
 header.bar nav a:hover { color: var(--prompt); }
 
-/* ============== ASCII BANNER ============== */
+/* ASCII Banner */
 
 pre.banner {
     font-family: inherit;
@@ -175,7 +175,7 @@ pre.banner {
     pre.banner { font-size: 0.46rem; }
 }
 
-/* ============== BREW-STYLE OUTPUT BLOCK ============== */
+/* Brew-Style Output Block */
 
 /* The whole page is rendered as a stream of these blocks.  Each opens
  * with `==>` (green) followed by a heading (bold white), then indented
@@ -218,7 +218,7 @@ pre.banner {
     font-weight: 700;
 }
 
-/* ============== HEADER METADATA STRIP ============== */
+/* Header Metadata Strip */
 /* A pseudo brew-cask "info" output — the case metadata. */
 
 .info-strip {
@@ -239,7 +239,7 @@ pre.banner {
     margin: 0;
 }
 
-/* ============== CTA BUTTONS — bracketed commands ============== */
+/* CTA Buttons */
 
 .cta {
     display: flex;
@@ -276,10 +276,10 @@ a.btn.dim:hover {
     border-color: var(--fg-dim);
 }
 
-/* ============== CODE / LOG BLOCKS ============== */
+/* Code and Log Blocks */
 
-/* Indented log block — appears under the section body, presented as the
- * actual command's stdout.  No box, no border — just the lines themselves. */
+/* Indented log block: appears under the section body, presented as the
+ * actual command's stdout.  No box, no border, just the lines themselves. */
 pre.log {
     margin: 0.6rem 0 0 0;
     padding: 0;
@@ -309,7 +309,7 @@ code.inl {
     font-size: 0.92em;
 }
 
-/* ============== INSPECT FORM (the prompt) ============== */
+/* Inspect Form (the prompt) */
 
 form.prompt-form {
     margin: 0.6rem 0 0;
@@ -366,7 +366,7 @@ form.prompt-form button:hover {
     background: var(--prompt);
     color: var(--bg);
 }
-/* A blinking cursor block that follows the input — gives the prompt a
+/* A blinking cursor block that follows the input: gives the prompt a
  * live-terminal feel even before the user starts typing. */
 form.prompt-form .caret {
     display: inline-block;
@@ -404,7 +404,7 @@ form.prompt-form .caret {
     border-bottom-color: var(--prompt);
 }
 
-/* ============== RESULT — verdict + report ============== */
+/* Result Verdict and Report */
 
 /* Verdict — a [STATUS] tag styled like a service-start message. */
 .verdict {
@@ -467,7 +467,7 @@ form.prompt-form .caret {
 .badge.err   { color: var(--err); }
 .badge.info  { color: var(--link); }
 
-/* ============== EXHIBIT / FIGURE FRAMES ============== */
+/* Exhibit Frames */
 
 figure.exhibit {
     margin: 0.7rem 0 0;
@@ -503,7 +503,7 @@ figure.exhibit figcaption {
     color: var(--fg-dim);
 }
 
-/* ============== EVIDENCE TRIPTYCH (the three method cards) ============== */
+/* Evidence Triptych */
 
 /* Render as three indented brew-style sub-blocks rather than a card grid —
  * keeps the page reading as continuous terminal output. */
@@ -549,7 +549,7 @@ figure.exhibit figcaption {
 }
 .method-list .specimen .v { color: var(--link); }
 
-/* ============== FOOTER ============== */
+/* Footer */
 
 footer.term {
     margin-top: 3rem;
@@ -566,7 +566,7 @@ footer.term .wrap {
 }
 footer.term .arrow { color: var(--prompt); font-weight: 700; margin-right: 0.5em; }
 
-/* ============== SCROLLBAR ============== */
+/* Scrollbar */
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
@@ -576,7 +576,7 @@ footer.term .arrow { color: var(--prompt); font-weight: 700; margin-right: 0.5em
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--prompt-deep); }
 
-/* ============== REDUCED MOTION ============== */
+/* Reduced Motion */
 
 @media (prefers-reduced-motion: reduce) {
     form.prompt-form .caret { animation: none; opacity: 1; }
@@ -697,7 +697,6 @@ pub async fn landing() -> Markup {
             div.wrap {
                 (info_header())
 
-                /* ============== HERO ============== */
                 div.block.hero {
                     span.arrow { "==>" }
                     h2 {
@@ -718,7 +717,6 @@ pub async fn landing() -> Markup {
                     }
                 }
 
-                /* ============== EXHIBIT A — DEMO ============== */
                 div.block {
                     span.arrow { "==>" }
                     h2 { "exhibit A " span.sub { "· live verify run · npm:sigstore@2.3.1" } }
@@ -757,7 +755,6 @@ pub async fn landing() -> Markup {
                     }
                 }
 
-                /* ============== METHOD ============== */
                 div.block {
                     span.arrow { "==>" }
                     h2 { "method of examination " span.sub { "· what it catches, and how" } }
@@ -811,7 +808,6 @@ pub async fn landing() -> Markup {
                     }
                 }
 
-                /* ============== INSTALL ============== */
                 div.block {
                     span.arrow { "==>" }
                     h2 { "install the CLI" }
@@ -831,7 +827,6 @@ pub async fn landing() -> Markup {
                     }
                 }
 
-                /* ============== API ============== */
                 div.block {
                     span.arrow { "==>" }
                     h2 { "API " span.sub { "· programmatic specimen request" } }

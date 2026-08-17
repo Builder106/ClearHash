@@ -51,9 +51,7 @@ pub enum SandboxError {
     CommitDrift { expected: String, actual: String },
 }
 
-// -----------------------------------------------------------------------------------------
-// Tarball extraction & tree-hashing (used by both registry-side and rebuild-side trees).
-// -----------------------------------------------------------------------------------------
+// Tarball extraction and tree-hashing (used by both registry-side and rebuild-side trees).
 
 pub fn extract_archive(
     adapter: &dyn EcosystemAdapter,
@@ -112,9 +110,7 @@ pub fn compare_trees(
     }
 }
 
-// -----------------------------------------------------------------------------------------
 // Rebuild orchestration.
-// -----------------------------------------------------------------------------------------
 
 pub struct RebuildOutcome {
     /// Path to the rebuilt archive file on the host (e.g. the `.tgz` `npm pack` produced).

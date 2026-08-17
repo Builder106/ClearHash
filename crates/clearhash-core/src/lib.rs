@@ -1,4 +1,4 @@
-//! Shared types for ClearHash. No I/O, no async — pure data.
+//! Shared types for ClearHash. No I/O, no async; pure data.
 
 use std::fmt;
 use std::str::FromStr;

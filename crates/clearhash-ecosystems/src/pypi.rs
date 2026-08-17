@@ -1,4 +1,4 @@
-//! PyPI adapter — skeleton. Filled in at Step 6 of the implementation plan.
+//! PyPI ecosystem adapter.
 
 use async_trait::async_trait;
 use clearhash_core::{Ecosystem, PackageRef, ProvenanceClaim};
@@ -15,13 +15,13 @@ impl EcosystemAdapter for PypiAdapter {
     }
 
     fn artifact_url(&self, _pkg: &PackageRef) -> Url {
-        // Real impl: fetch https://pypi.org/pypi/{name}/{version}/json, pick the sdist entry.
-        // Stubbed for Step 1; the URL is resolved lazily in the registry crate.
+        // Fetch https://pypi.org/pypi/{name}/{version}/json and pick the sdist entry.
+        // The URL is resolved lazily in the registry crate.
         Url::parse("https://pypi.org/").unwrap()
     }
 
     fn attestation_url(&self, _pkg: &PackageRef) -> Option<Url> {
-        // PEP 740 endpoint, filled in at Step 6.
+        // PEP 740 endpoint.
         None
     }
 

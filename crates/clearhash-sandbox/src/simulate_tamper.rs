@@ -25,7 +25,7 @@ pub enum TamperMode {
     ModeFlip,
     /// Delete an existing file. Demonstrates `OnlyInRebuild`.
     Deletion,
-    /// Apply all four — punchiest demo, surfaces every diff category.
+    /// Apply all four tamper modes to test every diff category.
     All,
 }
 
