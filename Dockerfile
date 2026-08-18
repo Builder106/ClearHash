@@ -6,6 +6,7 @@ FROM rust:1.88-bookworm AS build
 WORKDIR /work
 
 COPY Cargo.toml Cargo.lock ./
+COPY patches ./patches
 COPY crates ./crates
 
 # BuildKit cache mounts speed up subsequent rebuilds (deps stay compiled across cache hits).
