@@ -48,15 +48,15 @@ $ clearhash verify npm:sigstore@2.3.1
 ✓ MATCH npm:sigstore@2.3.1 tree-hash ec714016d7e4ce742f9aa23b6f16f19cb967bf82b78c343297013dcc268b107e
 ```text
 
-A tampered artifact gets a different ending. To see what ClearHash actually catches, run
+A tampered package gets a different ending. To see what ClearHash actually catches, run
 the verify with `--simulate-tamper`, which deliberately modifies the registry-extracted
-tree before comparison (the underlying tarball from npm is clean — the simulation is
+tree before comparison (the underlying package from npm is clean; the simulation is
 clearly announced):
 
 ```text
 $ clearhash verify --simulate-tamper npm:sigstore@2.3.1
-⚠ TAMPER SIMULATION · The registry-extracted tree will be modified before comparison (All mode).
-                      The MISMATCH below is real but the registry tarball is clean.
+⚠ TAMPER SIMULATION: The registry-extracted tree will be modified before comparison (All mode).
+                      The MISMATCH below is real but the registry package is clean.
 [1/5] Fetching sigstore from npm
 [2/5] Verifying Sigstore attestation
 [3/5] Spinning up rebuild container (node:20.11.1-bookworm-slim)
@@ -67,7 +67,7 @@ $ clearhash verify --simulate-tamper npm:sigstore@2.3.1
       · tampered modeflip:       dist/index.js                  (flipped the executable bit)
       · tampered deletion:       README.md                       (removed a file)
 
-✗ MISMATCH npm:sigstore@2.3.1 — 4 difference(s)
+✗ MISMATCH npm:sigstore@2.3.1: 4 difference(s)
     OnlyInRegistry  { path: "dist/.clearhash-tamper-demo.js" }
     ContentDiffers  { path: "dist/index.js" }
     ModeDiffers     { path: "dist/index.js" }
@@ -127,20 +127,14 @@ sequenceDiagram
 ```text
 
 The comparison model is **file-tree content hash**, not byte-identical tarball SHA-256.
-Strict byte equality isn't achievable today even with `SOURCE_DATE_EPOCH` — npm tarball
-ordering, gzip compression levels, and registry-injected `package.json` metadata vary
-between `npm pack` invocations. ClearHash normalizes both sides (strips mtimes, normalizes
-modes, drops the four npm-injected fields `_id`, `_integrity`, `_resolved`, `dist`) and
-compares a Merkle root over the resulting file tree.
+Strict byte equality is difficult to achieve reliably due to npm package ordering, gzip compression levels, and registry-injected `package.json` metadata variations between `npm pack` invocations. ClearHash normalizes both sides (strips timestamps, normalizes file permissions, and drops registry-injected fields) and compares a cryptographic hash tree over the resulting file tree.
 
 ---
 
 ## Try it without installing
 
 A hosted instance of the **inspect** endpoint runs at
-[**clear-hash.vercel.app**](https://clear-hash.vercel.app). It does the fetch + Sigstore parse +
-cert-chain validation parts of the pipeline. The full **verify** flow stays in the CLI
-because it needs a Docker daemon.
+[**clear-hash.vercel.app**](https://clear-hash.vercel.app). It performs package retrieval and certificate verification in the cloud. The full **verify** flow runs in the CLI because it requires a local Docker engine to perform safe rebuilds.
 
 ```bash
 curl 'https://clear-hash.vercel.app/api/inspect?package=npm:sigstore@2.3.1'
@@ -164,56 +158,47 @@ clearhash --version
 ## Use
 
 ```bash
-
 # Full pipeline: fetch + attest + rebuild + compare
-
 clearhash verify npm:sigstore@2.3.1
 
 # Just fetch + parse the attestation envelope (no docker required)
-
 clearhash inspect npm:sigstore@2.3.1
 
 # JSON output for CI
-
 clearhash verify npm:sigstore@2.3.1 --json
 
-# Cargo has no SLSA attestation in the wild yet — opt in explicitly
-
+# Cargo packages without signatures: opt in explicitly
 clearhash verify --allow-unattested cargo:serde@1.0.197
 
-# Keep the workdir to inspect a mismatch
-
+# Keep the temporary folder to inspect a mismatch
 clearhash verify npm:foo@1.0.0 --keep-workdir
 
-# Demo: deliberately tamper with the extracted registry tree so the diff is non-empty
-
-# (Output is clearly marked as a simulation; the npm tarball is clean.)
-
+# Demo: deliberately simulate a modified package to test diff rendering
 clearhash verify --simulate-tamper npm:sigstore@2.3.1
 clearhash verify --simulate-tamper=content-swap npm:sigstore@2.3.1
 ```text
 
 ## Exit codes
 
-| Code | Meaning                                                       |
+| Code | Meaning |
 | ---- | ------------------------------------------------------------- |
-| 0    | Tree-hash match. Safe to install.                             |
-| 1    | Tree-hash mismatch *or* attestation signature invalid. Block. |
-| 2    | No SLSA attestation, and `--allow-unattested` was not passed. |
-| 3    | Infrastructure failure (no docker, no network, etc.).         |
+| 0    | Tree-hash match. Safe to install. |
+| 1    | Tree-hash mismatch or invalid signature. Block installation. |
+| 2    | No signature found, and `--allow-unattested` was not passed. |
+| 3    | Infrastructure failure (no docker, network down, etc.). |
 
 ---
 
 ## Ecosystem support
 
-| Ecosystem | Status              | Attestation source                             | Rebuild image                 |
+| Ecosystem | Status | Attestation source | Rebuild image |
 | --------- | ------------------- | ---------------------------------------------- | ----------------------------- |
-| **npm**   | ✅ end-to-end       | `registry.npmjs.org/-/npm/v1/attestations/...`|`node:20.11.1-bookworm-slim`  |
-| **PyPI**  | 🚧 adapter scaffold | PEP 740 `/integrity/.../provenance`|`python:3.12.2-slim-bookworm` |
-| **Cargo** | 🚧 adapter scaffold | *none — `--allow-unattested`required*         |`rust:1.78-slim-bookworm`     |
+| **npm**   | ✅ end-to-end | `registry.npmjs.org/-/npm/v1/attestations/...` | `node:20.11.1-bookworm-slim` |
+| **PyPI**  | 🚧 adapter scaffold | PEP 740 `/integrity/.../provenance` | `python:3.12.2-slim-bookworm` |
+| **Cargo** | 🚧 adapter scaffold | none (`--allow-unattested` required) | `rust:1.78-slim-bookworm` |
 
 The npm path is end-to-end working today. PyPI and Cargo land their full rebuild flows
-behind the same `EcosystemAdapter` trait — no engine changes needed.
+behind the same adapter interface without engine changes.
 
 ---
 
