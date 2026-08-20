@@ -1,5 +1,5 @@
 # clear-hash Rust formatting configuration
-# Run with: cargo fmt --all --check
+# Run with: cargo fmt --check --workspace
 
 edition = "2021"
 max_width = 100
