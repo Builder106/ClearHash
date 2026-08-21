@@ -8,6 +8,7 @@ WORKDIR /work
 COPY Cargo.toml Cargo.lock ./
 COPY patches ./patches
 COPY crates ./crates
+COPY api ./api
 
 # BuildKit cache mounts speed up subsequent rebuilds (deps stay compiled across cache hits).
 # On a cold cache (first deploy), this takes ~4-8 min. Subsequent deploys with only source
