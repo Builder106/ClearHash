@@ -317,7 +317,8 @@ fn base64_decode_standard(s: &str) -> Result<Vec<u8>, String> {
         return Err("base64: length not multiple of 4".into());
     }
     let mut out = Vec::with_capacity(s.len() / 4 * 3);
-    for chunk in s.chunks_exact(4) {
+    let (chunks, _remainder) = s.as_chunks::<4>();
+    for chunk in chunks {
         let mut buf = [0u32; 4];
         for (i, &b) in chunk.iter().enumerate() {
             buf[i] = match b {
