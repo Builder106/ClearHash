@@ -10,11 +10,13 @@ COPY patches ./patches
 COPY crates ./crates
 COPY api ./api
 
+ARG TARGETARCH
+
 # BuildKit cache mounts speed up subsequent rebuilds (deps stay compiled across cache hits).
-# On a cold cache (first deploy), this takes ~4-8 min. Subsequent deploys with only source
-# changes take ~30-90s.
-RUN --mount=type=cache,target=/usr/local/cargo/registry \
-    --mount=type=cache,target=/work/target \
+# Differentiate cache mounts by target architecture and lock sharing so concurrent multi-platform
+# builds (e.g. linux/amd64 and linux/arm64) do not collide on registry locks or target artifacts.
+RUN --mount=type=cache,id=cargo-registry-${TARGETARCH},target=/usr/local/cargo/registry,sharing=locked \
+    --mount=type=cache,id=cargo-target-${TARGETARCH},target=/work/target,sharing=locked \
     cargo build --release -p clearhash-web && \
     cp /work/target/release/clearhash-web /usr/local/bin/clearhash-web
 
