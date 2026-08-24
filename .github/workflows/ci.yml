@@ -74,6 +74,22 @@ jobs:
       - run: cargo build --workspace
       - run: cargo test --workspace
 
+  coverage:
+    name: Deterministic library coverage
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-llvm-cov
+      - name: Enforce 100% coverage for deterministic crates
+        run: >-
+          cargo llvm-cov --package clearhash-core --lib --all-features
+          --fail-under-lines 100
+
   # Docker-gated integration test: only runs on push to main (where ubuntu has docker daemon).
   integration:
     name: Integration (live npm verify)

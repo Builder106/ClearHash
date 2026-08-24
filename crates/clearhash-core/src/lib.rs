@@ -192,6 +192,16 @@ mod tests {
     }
 
     #[test]
+    fn ecosystem_labels_and_package_errors_are_complete() {
+        assert_eq!(Ecosystem::Npm.as_str(), "npm");
+        assert_eq!(Ecosystem::Pypi.as_str(), "pypi");
+        assert_eq!(Ecosystem::Cargo.as_str(), "cargo");
+        assert!("npm:@scope/name@".parse::<PackageRef>().is_err());
+        assert!("npm:@1.2.3".parse::<PackageRef>().is_err());
+        assert!("npm".parse::<PackageRef>().is_err());
+    }
+
+    #[test]
     fn rejects_missing_version() {
         assert!("npm:litellm".parse::<PackageRef>().is_err());
     }
@@ -225,5 +235,18 @@ mod tests {
             1
         );
         assert_eq!(VerifyOutcome::NoAttestation.exit_code(), 2);
+        assert_eq!(
+            VerifyOutcome::RebuildFailed {
+                stderr_tail: "failed".into()
+            }
+            .exit_code(),
+            3
+        );
+    }
+
+    #[test]
+    fn hashes_and_formats_bytes() {
+        let digest = sha256(b"hello");
+        assert_eq!(hex_digest(&digest), hex::encode(digest));
     }
 }

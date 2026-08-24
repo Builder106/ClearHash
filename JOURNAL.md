@@ -4,6 +4,10 @@
 > things happen — retrospectives need this raw material to land.
 > Reverse-chronological; one paragraph max per entry.
 
+## 2026-08-23 — Scoped coverage gate to the pure core crate #decision
+
+The previous workspace coverage command measured network, Docker, provenance, and web code together and reached 56.49% lines. CI now enforces 100% lines for `clearhash-core`, the pure hashing, package-reference, outcome, and tree-diff library; integration-boundary crates remain covered by their focused tests without pretending those external systems are unit-test scope.
+
 ## 2026-08-14: Accessible plain-English documentation update #decision
 
 Updated the README introduction and tagline to frame software supply chain security around a food safety-seal metaphor. Clarified the core value proposition of byte-for-byte binary verification for non-specialist readers without compromising the deep-dive SLSA/Rekor engineering specifications.

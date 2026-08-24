@@ -168,6 +168,14 @@ mod tests {
     }
 
     #[test]
+    fn canonical_bytes_and_hex_rendering_are_stable() {
+        let entry = e("a", b"x", true);
+        assert_eq!(entry.canonical_bytes().len(), 35);
+        let hash = FileTreeHash::from_sorted_entries(std::slice::from_ref(&entry));
+        assert_eq!(hash.to_hex(), hex_digest(&hash.0));
+    }
+
+    #[test]
     fn diff_detects_each_category() {
         let r = vec![
             e("a", b"x", false),
@@ -186,5 +194,32 @@ mod tests {
         assert!(matches!(diffs[1], TreeDifference::ContentDiffers { ref path } if path == "b"));
         assert!(matches!(diffs[2], TreeDifference::OnlyInRegistry { ref path } if path == "c"));
         assert!(matches!(diffs[3], TreeDifference::OnlyInRebuild { ref path } if path == "d"));
+    }
+
+    #[test]
+    fn diff_reports_trailing_entries_from_each_tree() {
+        let registry = vec![e("a", b"x", false), e("b", b"x", false)];
+        let rebuild = vec![e("a", b"x", false)];
+        assert_eq!(
+            diff_sorted(&registry, &rebuild),
+            vec![TreeDifference::OnlyInRegistry { path: "b".into() }]
+        );
+
+        let registry = vec![e("a", b"x", false)];
+        let rebuild = vec![e("a", b"x", false), e("b", b"x", false)];
+        assert_eq!(
+            diff_sorted(&registry, &rebuild),
+            vec![TreeDifference::OnlyInRebuild { path: "b".into() }]
+        );
+
+        let registry = vec![e("b", b"x", false)];
+        let rebuild = vec![e("a", b"x", false)];
+        assert_eq!(
+            diff_sorted(&registry, &rebuild),
+            vec![
+                TreeDifference::OnlyInRebuild { path: "a".into() },
+                TreeDifference::OnlyInRegistry { path: "b".into() },
+            ]
+        );
     }
 }
