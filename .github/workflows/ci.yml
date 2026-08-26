@@ -9,6 +9,9 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 env:
   CARGO_TERM_COLOR: always
   RUSTFLAGS: "-D warnings"
@@ -62,6 +65,7 @@ jobs:
 
   test:
     name: Test (${{ matrix.os }})
+    needs: [fmt, clippy, security]
     strategy:
       fail-fast: false
       matrix:
@@ -76,6 +80,7 @@ jobs:
 
   coverage:
     name: Deterministic library coverage
+    needs: [fmt, clippy, security]
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
@@ -93,6 +98,7 @@ jobs:
   # Docker-gated integration test: only runs on push to main (where ubuntu has docker daemon).
   integration:
     name: Integration (live npm verify)
+    needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     steps:
