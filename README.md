@@ -7,7 +7,7 @@
 [![CI](https://img.shields.io/badge/CI-passing-success.svg)](.github/workflows/ci.yml)
 [![Rust](https://img.shields.io/badge/rust-1.88%2B-orange.svg)](https://www.rust-lang.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Ecosystems](https://img.shields.io/badge/ecosystems-npm%20%7C%20PyPI%20%7C%20Cargo-7c3aed.svg)]
+![Ecosystems](https://img.shields.io/badge/ecosystems-npm%20%7C%20PyPI%20%7C%20Cargo-7c3aed.svg)
 [![Sigstore](https://img.shields.io/badge/SLSA-Sigstore%20%2B%20Rekor-22c55e.svg)](https://www.sigstore.dev/)
 [![Demo](https://img.shields.io/badge/demo-clear-hash.vercel.app-success.svg)](https://clear-hash.vercel.app/)
 
@@ -46,7 +46,7 @@ $ clearhash verify npm:sigstore@2.3.1
 [5/5] Comparing file trees
 
 ✓ MATCH npm:sigstore@2.3.1 tree-hash ec714016d7e4ce742f9aa23b6f16f19cb967bf82b78c343297013dcc268b107e
-```text
+```
 
 A tampered package gets a different ending. To see what ClearHash actually catches, run
 the verify with `--simulate-tamper`, which deliberately modifies the registry-extracted
@@ -72,7 +72,7 @@ $ clearhash verify --simulate-tamper npm:sigstore@2.3.1
     ContentDiffers  { path: "dist/index.js" }
     ModeDiffers     { path: "dist/index.js" }
     OnlyInRebuild   { path: "README.md" }
-```text
+```
 
 The four tamper modes (`injected-payload`, `content-swap`, `mode-flip`, `deletion`, or
 `all`) each surface a different diff category. Useful for demos, screenshots, and writing
@@ -124,7 +124,7 @@ sequenceDiagram
     else hashes differ
         CLI-->>User: ✗ MISMATCH + per-file diff (exit 1)
     end
-```text
+```
 
 The comparison model is **file-tree content hash**, not byte-identical tarball SHA-256.
 Strict byte equality is difficult to achieve reliably due to npm package ordering, gzip compression levels, and registry-injected `package.json` metadata variations between `npm pack` invocations. ClearHash normalizes both sides (strips timestamps, normalizes file permissions, and drops registry-injected fields) and compares a cryptographic hash tree over the resulting file tree.
@@ -138,7 +138,7 @@ A hosted instance of the **inspect** endpoint runs at
 
 ```bash
 curl 'https://clear-hash.vercel.app/api/inspect?package=npm:sigstore@2.3.1'
-```text
+```
 
 Or paste a package into the form at [`/inspect`](https://clear-hash.vercel.app/inspect).
 
@@ -148,10 +148,10 @@ Requires Rust 1.88+ and a running Docker daemon (Docker Desktop or OrbStack on m
 
 ```bash
 git clone https://github.com/Builder106/clear-hash.git
-cd ClearHash
+cd clear-hash
 cargo install --path crates/clearhash-cli
 clearhash --version
-```text
+```
 
 ---
 
@@ -176,7 +176,7 @@ clearhash verify npm:foo@1.0.0 --keep-workdir
 # Demo: deliberately simulate a modified package to test diff rendering
 clearhash verify --simulate-tamper npm:sigstore@2.3.1
 clearhash verify --simulate-tamper=content-swap npm:sigstore@2.3.1
-```text
+```
 
 ## Exit codes
 
@@ -243,7 +243,7 @@ ClearHash/
 ├── vercel.json                    # Vercel rewrites + runtime config
 ├── Dockerfile                     # alternative: multi-stage build of clearhash-web binary
 └── fly.toml                       # Fly.io deployment config (Docker-based)
-```text
+```
 
 Every ecosystem-specific quirk lives behind `EcosystemAdapter`. Engine crates depend only
 on the trait — adding a new ecosystem is one new file under `clearhash-ecosystems/src/`.
@@ -258,15 +258,12 @@ secondary target is any Dockerfile-friendly host (Fly.io, Render, Railway, plain
 ### Vercel (recommended)
 
 ```bash
-
 # One-time: link this repo to a new Vercel project
-
 vercel link
 
 # Deploy
-
 vercel deploy --prod
-```text
+```
 
 Vercel auto-detects [vercel.json](vercel.json) and the root `[package]`+`[[bin]]` entries
 in [Cargo.toml](Cargo.toml). The function binary is built from [api/clearhash.rs](api/clearhash.rs),
@@ -276,18 +273,15 @@ so every route runs through the same handler that powers the local server.
 ## Docker (Fly.io / Render / Railway)
 
 ```bash
-
 # Fly.io (one-time)
-
 flyctl launch --copy-config --no-deploy
 flyctl deploy
 
 # Or build + run locally
-
 docker build -t clearhash-web .
 docker run --rm -p 8080:8080 clearhash-web
 open http://localhost:8080
-```text
+```
 
 The deployed Docker image is ~158 MB (debian:bookworm-slim + the ~5 MB Rust binary + assets).
 No registry credentials, no DB, no secrets — it just proxies the live npm/PyPI APIs.
