@@ -59,9 +59,12 @@ jobs:
         with:
           command: check
           arguments: --all-features
-      - uses: rustsec/audit-check@v2
+      - name: Install cargo-audit
+        uses: taiki-e/install-action@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          tool: cargo-audit
+      - name: Security audit
+        run: cargo audit
 
   test:
     name: Test (${{ matrix.os }})
