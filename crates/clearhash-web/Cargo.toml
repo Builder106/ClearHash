@@ -37,3 +37,6 @@ tracing-subscriber = { workspace = true }
 
 # rate-limiting helper
 governor = "0.10"
+
+[dev-dependencies]
+tower = { version = "0.5", features = ["util"] }
